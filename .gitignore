@@ -1,0 +1,5 @@
+tiny-imagenet-200/
+checkpoints/
+results/
+__pycache__/
+*.pth
