@@ -17,12 +17,12 @@ def build_optim(model, optim_name="sgd", lr=0.1, wd=1e-4):
 
 # function: build_scheduler
 # uses either cosine or step scheduling to control how learning rate changes over training
-def build_scheduler(optim, scheduler="cosine", num_epochs=30):
+def build_scheduler(optimiser, scheduler="cosine", num_epochs=30):
     if scheduler == "cosine":
-        return optim.lr_scheduler.CosineAnnealingLR(optim, T_max=num_epochs)
+        return optim.lr_scheduler.CosineAnnealingLR(optimiser, T_max=num_epochs)
     elif scheduler == "step":
         # drops by 10x at epoch 10 and 20
-        return optim.lr_scheduler.MultStepLR(optim, milestones=[10, 20], gamma=0.1)
+        return optim.lr_scheduler.MultiStepLR(optimiser, milestones=[10, 20], gamma=0.1)
 
 # function: train_epoch
 # training loop that iterates over number of epochs
@@ -30,6 +30,7 @@ def train_epoch(model, loader, optim, criterion, device):
     model.train()
     total_loss, correct, total = 0, 0, 0
     for images, labels in tqdm(loader, desc="Train", leave=False):
+        images, labels = images.to(device), labels.to(device)
         # clear gradients from previous batch
         optim.zero_grad()
         # produce raw images for forward pass
@@ -41,9 +42,9 @@ def train_epoch(model, loader, optim, criterion, device):
         # update each parameter
         optim.step()
         # compute average loss per sample
-        total_loss += loss.item() * images[0]
+        total_loss += loss.item() * images.size(0)
         correct += (outputs.argmax(1) == labels).sum().item()
-        total += images[0]
+        total += images.size(0)
     return total_loss / total, correct / total
 
 # function: eval_epoch
@@ -57,11 +58,9 @@ def eval_epoch(model, loader, criterion, device):
         images, labels = images.to(device), labels.to(device)
         outputs = model(images)
         loss = criterion(outputs, labels)
-        loss.backward()
-        optim.step()
-        total_loss += loss.item() * images[0]
+        total_loss += loss.item() * images.size(0)
         correct += (outputs.argmax(1) == labels).sum().item()
-        total += images[0]
+        total += images.size(0)
     return total_loss / total, correct / total
 
 # function: run_training

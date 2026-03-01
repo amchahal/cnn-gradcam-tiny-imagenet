@@ -67,9 +67,9 @@ def get_dataloaders(data_dir="./tiny-imagenet-200/", batch_size=128, num_workers
 # function: denormalise
 # used to display the image (converts back from tensorfloat to image)
 
-def denormalise(tensor, mean=mean, std=std):
+def denormalise(tensor, mean=MEAN, std=STD):
     t = tensor.clone()
-    for c, (m, s) in enumerate(zip(mean, std)):
+    for c, (m, s) in enumerate(zip(MEAN, STD)):
         t[c] = t[c] * s + m
         
     return t

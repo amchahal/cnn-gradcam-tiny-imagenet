@@ -36,13 +36,13 @@ def build_model(architecture="resnet18", norm="batch", dropout=0.0, num_classes=
     # dropout: applied before final FC
 
     if architecture == "resnet18":
-        model = models.resnet18(weights=None):
+        model = models.resnet18(weights=None)
         model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
         model.maxpool = nn.Identity()
         model.fc = nn.Linear(512, num_classes)
 
     elif architecture == "resnet34":
-        model = models.resnet34(weights=None):
+        model = models.resnet34(weights=None)
         model.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
         model.maxpool = nn.Identity()
         model.fc = nn.Linear(512, num_classes)
@@ -55,7 +55,7 @@ def build_model(architecture="resnet18", norm="batch", dropout=0.0, num_classes=
         raise ValueError(f"unknown architecture: {architecture}")
 
     if norm == "group":
-        swap_norm_bn_gn(model, num_classes)
+        swap_norm_bn_gn(model)
     elif norm == "layer":
         swap_norm_bn_ln(model)
 
