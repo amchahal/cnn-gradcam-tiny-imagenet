@@ -34,7 +34,7 @@ class GradCAM:
         weights = self.grads.mean(dim=(2, 3), keepdim=True)
         # scale each feature map channel according to importance
         # collapse channels into a single map
-        cam = torch.relu((weights * self.activations).sum(dim=1)).squeeze().cpu().numpy()
+        cam = torch.relu((weights * self.activations).sum(dim=1)).squeeze().detach().cpu().numpy()
 
         # normalise to [0, 1] so can be visualised on heatmap
         if cam.max() > 0:
@@ -61,7 +61,7 @@ class GradCamPlusPlus(GradCAM):
         alpha    = grads_sq / (2 * grads_sq + grads ** 3 * acts.sum(dim=(2,3), keepdim=True) + 1e-7)
         weights  = (alpha * torch.relu(output[0, class_idx].exp() * grads)).sum(dim=(2,3), keepdim=True)
 
-        cam = torch.relu((weights * acts).sum(dim=1)).squeeze().cpu().numpy()
+        cam = torch.relu((weights * acts).sum(dim=1)).squeeze().detach().cpu().numpy()
         if cam.max() > 0:
             cam = (cam - cam.min()) / (cam.max() - cam.min())
         return cam, predicted
