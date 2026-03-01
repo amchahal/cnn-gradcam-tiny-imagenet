@@ -11,7 +11,6 @@ STD  = [0.2770, 0.2691, 0.2821]
 # function: fix_val_folder
 # convert file/folder structure to what PyTorch expects (only required for validation folder)
 # build a dictionary to map each filename to its class ID
-
 def fix_val_folder(data_dir="./tiny-imagenet-200/"):
     val_dir = os.path.join(data_dir, "val")
     val_images_dir = os.path.join(val_dir, "images")
@@ -37,7 +36,6 @@ def fix_val_folder(data_dir="./tiny-imagenet-200/"):
 
 # function: get_dataloaders
 # num_workers -> 2 CPUs load and preprocess data in parallel while GPU is training
-
 def get_dataloaders(data_dir="./tiny-imagenet-200/", batch_size=128, num_workers=2):
     # augment training data:
     # RandomCrop -> pads the data with 8 pixels on each side and randomly crops back to 64x64 (introduces noise)
@@ -66,7 +64,6 @@ def get_dataloaders(data_dir="./tiny-imagenet-200/", batch_size=128, num_workers
 
 # function: denormalise
 # used to display the image (converts back from tensorfloat to image)
-
 def denormalise(tensor, mean=MEAN, std=STD):
     t = tensor.clone()
     for c, (m, s) in enumerate(zip(MEAN, STD)):
