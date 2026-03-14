@@ -8,7 +8,7 @@ Files included:
 4. gradcam.py: contains Grad-CAM class
 5. cnn_gradcam.ipynb: runs experiments and does visualisations
 
-### Main idea:
+### Implementation:
 - Training a convolutional neural network to classify images from the Tiny ImageNet dataset
 - Using Grad-CAM to interpret what the network was actually learning across each layer
-- Analysing effects of various parameters (optimizer, normalisation method, deeper networks, etc.) 
+- Analysing effects of changing various parameters (optimizer, normalisation method, deeper networks, etc.) 
